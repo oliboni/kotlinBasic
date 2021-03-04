@@ -1,5 +1,8 @@
 package br.com.alura.bytebank.model
 
+import br.com.alura.bytebank.exception.FalhaAutenticacaoException
+import br.com.alura.bytebank.exception.SaldoInsuficienteException
+
 class ContaCorrente(
     titular: Cliente,
     numeroConta: Int
@@ -16,15 +19,21 @@ class ContaCorrente(
         }
     }
 
-    override fun transferencia(conta: Conta, valor: Double): Boolean {
+    override fun autentica(senha: String): Boolean {
+        return titular.autentica(senha)
+    }
+
+    override fun transferencia(conta: Conta, valor: Double, senha: String) {
+        if (!autentica(senha)){
+            throw FalhaAutenticacaoException()
+        }
         if (saldo < valor) {
             println("Saldo insuficiente!")
-            return false
+            throw SaldoInsuficienteException("O Saldo é insuficiente!(saldo: $saldo")
         }
 
         saldo -= valor
         conta.deposito(valor);
-        return true
     }
 
 }

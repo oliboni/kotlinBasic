@@ -5,12 +5,12 @@ package br.com.alura.bytebank.model
 abstract class Conta(
     var titular: Cliente,
     val numeroConta: Int
-) {
+) : Autenticavel {
 
     var saldo = 0.0
         protected set
 
-    companion object {
+    companion object Contador {
         var total = 0
             private set
     }

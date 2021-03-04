@@ -1,3 +1,5 @@
+import br.com.alura.bytebank.exception.FalhaAutenticacaoException
+import br.com.alura.bytebank.exception.SaldoInsuficienteException
 import br.com.alura.bytebank.model.*
 
 fun testaContasDiferentes() {
@@ -12,8 +14,8 @@ fun testaContasDiferentes() {
     contaSalario.deposito(1000.0)
 
 
-    contaCorrente.transferencia(contaPoupanca, 200.0)
-    contaCorrente.transferencia(contaSalario, 200.0)
+    contaCorrente.transferencia(contaPoupanca, 200.0,"123")
+    contaCorrente.transferencia(contaSalario, 200.0,"123")
     println("Saldo conta corrente após realizar transferências: ${contaCorrente.saldo}")
     println("Saldo conta poupança após receber transferência..: ${contaPoupanca.saldo}")
     println("Saldo conta salario após receber transferência...: ${contaSalario.saldo}")
@@ -29,15 +31,29 @@ fun testaContasDiferentes() {
 
     println("-------------------------------------------------------------------------------------")
 
-    contaCorrente.transferencia(contaPoupanca, 100.0)
+    contaCorrente.transferencia(contaPoupanca, 100.0, "123")
     println("Saldo conta corrente após transferência para conta poupança: ${contaCorrente.saldo}")
     println("Saldo conta poupança após receber transferência da corrente: ${contaPoupanca.saldo}")
 
     println("-------------------------------------------------------------------------------------")
 
-    contaPoupanca.transferencia(contaCorrente, 100.0)
+    contaPoupanca.transferencia(contaCorrente, 100.0,"1234")
     println("Saldo conta poupança após transferência para conta corrente: ${contaCorrente.saldo}")
     println("Saldo conta corrente após receber transferência da poupança: ${contaPoupanca.saldo}")
+
+    println("-------------------------------------------------------------------------------------")
+
+    try {
+        contaCorrente.transferencia(contaPoupanca, 1400.0,"1234")
+    } catch (e: SaldoInsuficienteException){
+        e.printStackTrace()
+    } catch (e: FalhaAutenticacaoException){
+        e.printStackTrace()
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+    println("Saldo conta corrente após transferência para conta poupança: ${contaCorrente.saldo}")
+    println("Saldo conta poupança após receber transferência da corrente: ${contaPoupanca.saldo}")
 
     println("-------------------------------------------------------------------------------------")
     println("Total de contas: ${Conta.total}")

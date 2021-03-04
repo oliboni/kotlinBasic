@@ -15,4 +15,9 @@ class ContaSalario(
         }
     }
 
+    override fun autentica(senha: String): Boolean {
+        return titular.autentica(senha)
+    }
+
+
 }
